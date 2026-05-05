@@ -72,13 +72,16 @@ describe('CozyProvision plugin', () => {
     it('POSTs /instances on cozy admin and publishes user.created', async () => {
       const scope = nock(COZY_URL)
         .post('/instances')
-        .query({
-          Domain: 'alice.twake.local',
-          Locale: 'fr',
-          Email: 'alice@twake.local',
-          OrgID: 'twp-test',
-          OrgDomain: 'twake.local',
-        })
+        .query(
+          q =>
+            q.Domain === 'alice.twake.local' &&
+            q.Locale === 'fr' &&
+            q.Email === 'alice@twake.local' &&
+            q.OrgID === 'twp-test' &&
+            q.OrgDomain === 'twake.local' &&
+            typeof q.Passphrase === 'string' &&
+            q.Passphrase.length > 0
+        )
         .matchHeader('authorization', /^Basic /)
         .reply(201, { ok: true });
 

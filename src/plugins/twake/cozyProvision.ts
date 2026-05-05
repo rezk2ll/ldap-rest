@@ -17,6 +17,7 @@
  * are silently skipped and a one-time warning is logged.
  */
 import { Buffer } from 'buffer';
+import { randomBytes } from 'crypto';
 
 import fetch from 'node-fetch';
 
@@ -135,6 +136,11 @@ export default class CozyProvision extends DmPlugin {
     if (email) params.set('Email', email);
     if (this.cozyOrgId) params.set('OrgID', this.cozyOrgId);
     if (this.cozyOrgDomain) params.set('OrgDomain', this.cozyOrgDomain);
+    // POC: pass an arbitrary passphrase so cozy-stack flips the instance to
+    // onboarded immediately. SCIM-provisioned users have no vault state to
+    // back this with, so the value is throwaway — proper signups should set
+    // their own passphrase later.
+    params.set('Passphrase', randomBytes(24).toString('hex'));
 
     const url = `${this.cozyAdminUrl}/instances?${params.toString()}`;
     const auth = Buffer.from(
