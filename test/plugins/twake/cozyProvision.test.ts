@@ -79,6 +79,7 @@ describe('CozyProvision plugin', () => {
             q.Email === 'alice@twake.local' &&
             q.OrgID === 'twp-test' &&
             q.OrgDomain === 'twake.local' &&
+            q.ContextName === 'default' &&
             typeof q.Passphrase === 'string' &&
             q.Passphrase.length > 0
         )
